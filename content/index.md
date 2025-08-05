@@ -1,1 +1,1 @@
-## Start
+# - [[Denoising Diffusion Probabilistic Models]]
