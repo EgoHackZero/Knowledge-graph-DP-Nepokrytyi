@@ -4,7 +4,7 @@ Some motivations:
 
 Consider the traditional gaussian distribution:
 
-$N(μ,Σ)$
+$$N(μ,Σ)$$
 
 where μ is the mean and Σ is the covariance matrix.
 
