@@ -24,12 +24,6 @@ Let $q(x_0)$ be the real data distribution, say of "real images". We can sampl
 $$
 q(x_t∣x_{t−1})=N(x_t;\sqrt{1−β_t} \cdot x_{t−1},β_tI).
 $$
-$$
-f(x) = \int_{-\infty}^\infty
-    f\hat(\xi),e^{2 \pi i \xi x}
-    \,d\xi
-$$
-
 
 Recall that a normal distribution (also called Gaussian distribution) is defined by 2 parameters: a mean $μ$ and a variance $σ^2≥0$. Basically, each new (slightly noisier) image at time step $t$ is drawn from a **conditional Gaussian distribution** with $μ_t=\sqrt{1−β_t}\cdot x_{t−1}$​ and $σ_t^2=β_t$​, which we can do by sampling $ϵ∼N(0,I)$ and then setting $x_t=\sqrt{1−β_t}\cdot x_{t−1}+\sqrt{β_t}ϵ$.
 
