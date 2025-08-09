@@ -22,6 +22,12 @@ In a bit more detail for images, the set-up consists of 2 processes:
 Let $q(x_0)$ be the real data distribution, say of "real images". We can sample from this distribution to get an image, $x_0∼q(x_0)$. We define the forward diffusion process $q(x_t∣x_{t−1})$ which adds Gaussian noise at each time step $t$, according to a known variance schedule $0<β_1<β_2<...<β_T<1$ as
 
 $$q(x_t∣x_{t−1})=N(x_t;\sqrt{1−β_t} \cdot x_{t−1},β_tI).$$
+$$
+f(x) = \int_{-\infty}^\infty
+    f\hat(\xi),e^{2 \pi i \xi x}
+    \,d\xi
+$$
+
 
 Recall that a normal distribution (also called Gaussian distribution) is defined by 2 parameters: a mean $μ$ and a variance $σ^2≥0$. Basically, each new (slightly noisier) image at time step $t$ is drawn from a **conditional Gaussian distribution** with $μ_t=\sqrt{1−β_t}\cdot x_{t−1}$​ and $σ_t^2=β_t$​, which we can do by sampling $ϵ∼N(0,I)$ and then setting $x_t=\sqrt{1−β_t}\cdot x_{t−1}+\sqrt{β_t}ϵ$.
 
