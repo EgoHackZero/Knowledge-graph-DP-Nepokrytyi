@@ -54,6 +54,8 @@ $$
 
 This was then later improved in the [[Improved diffusion models]] paper, where a neural network also learns the variance of this backwards process, besides the mean.
 
+# Defining an objective function (by reparametrizing the mean)
+
 - Most diffusion models use architectures that are some variant of a [U-net](https://www.google.com/url?q=https%3A%2F%2Farxiv.org%2Fabs%2F1505.04597) and that's what we'll use here.
 	- a [[ResNet downsampling]] block with [[spatial self-attention]]
 
