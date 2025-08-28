@@ -56,6 +56,23 @@ This was then later improved in the [[Improved diffusion models]] paper, where
 
 # Defining an objective function (by reparametrizing the mean)
 
+$$
+q(x_t \mid x_0) = \mathcal{N}\big(x_t; \sqrt{\bar{\alpha}_t}x_0,\,(1-\bar{\alpha}_t)I \big)
+$$
+
+$$
+\mu_\theta(x_t, t) = \frac{1}{\sqrt{\alpha_t}}
+\left(x_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}} \, \epsilon_\theta(x_t, t)\right)
+$$
+
+$$
+\lVert \epsilon - \epsilon_\theta(x_t, t) \rVert^2
+= \lVert \epsilon - \epsilon_\theta\big(\sqrt{\bar{\alpha}_t}x_0 + \sqrt{1-\bar{\alpha}_t}\,\epsilon,\, t\big) \rVert^2
+$$
+
+
+![[Pasted image 20250829010726.png]]
+
 - Most diffusion models use architectures that are some variant of a [U-net](https://www.google.com/url?q=https%3A%2F%2Farxiv.org%2Fabs%2F1505.04597) and that's what we'll use here.
 	- a [[ResNet downsampling]] block with [[spatial self-attention]]
 
