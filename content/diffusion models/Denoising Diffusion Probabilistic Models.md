@@ -49,8 +49,8 @@ At the first paper author decided to **keep the variance fixed, and let the neu
 - **Loss function:** simplified to an MSE between predicted noise and true noise: 
 
 $$
-    L_{\text{simple}} = \mathbb{E}_{t, x_0, \epsilon} \big[ \|\epsilon - \epsilon_\theta(\sqrt{\bar{\alpha}_t}x_0 + \sqrt{1-\bar{\alpha}_t}\epsilon, t) \|^2 \big].
-    $$
+L_{\text{simple}} = \mathbb{E}_{t, x_0, \epsilon} \big[ \|\epsilon - \epsilon_\theta(\sqrt{\bar{\alpha}_t}x_0 + \sqrt{1-\bar{\alpha}_t}\epsilon, t) \|^2 \big].
+$$
 
 This was then later improved in the [[Improved diffusion models]] paper, where a neural network also learns the variance of this backwards process, besides the mean.
 
