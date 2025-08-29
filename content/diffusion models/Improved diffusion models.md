@@ -58,7 +58,7 @@ $$
 
 
 
-
+%% 
 $$
 L_{\text{vb}} = \mathrm{KL}\big(q(x_{t-1} \mid x_t, x_0) \ \|\ p_\theta(x_{t-1} \mid x_t) \big)
 $$
@@ -89,3 +89,4 @@ $$
 |Loss|Only noise-prediction MSE|Hybrid loss: noise MSE + KL variance term|
 |Noise schedule|Linear βt\beta_tβt​|Cosine βt\beta_tβt​ schedule|
 |Guidance|Requires classifier|Classifier-free guidance|
+ %%
