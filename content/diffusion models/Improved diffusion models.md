@@ -31,6 +31,34 @@ $$
 L = L_{\text{simple}} + \lambda L_{\text{vb}}
 $$
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $$
 L_{\text{vb}} = \mathrm{KL}\big(q(x_{t-1} \mid x_t, x_0) \ \|\ p_\theta(x_{t-1} \mid x_t) \big)
 $$
