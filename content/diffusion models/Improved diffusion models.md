@@ -11,4 +11,4 @@ Original paper [link](https://openreview.net/pdf?id=-NEXDKk8gZ)
 $$
 \log \sigma_t^2 = v \cdot \log \beta_t + (1-v) \cdot \log \tilde{\beta}_t
 $$
-
+where $v$ is predicted by the network and interpolates between the forward variance $\beta_t$​ and the “posterior variance” $\tilde{\beta}_t$​.
