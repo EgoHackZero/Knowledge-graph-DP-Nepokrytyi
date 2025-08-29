@@ -56,22 +56,53 @@ This was then later improved in the [[Improved diffusion models]] paper, where
 
 # Defining an objective function (by reparametrizing the mean)
 
-$$
-q(x_t \mid x_0) = \mathcal{N}\big(x_t; \sqrt{\bar{\alpha}_t}x_0,\,(1-\bar{\alpha}_t)I \big)
-$$
-
-$$
+1. **Variational Objective via ELBO**  
+    The forward diffusion process $q$ and the learned reverse process $p_\theta$ together form a structure analogous to a _variational autoencoder_ (VAE). Training leverages the evidence lower bound (ELBO) to minimize the negative log‑likelihood of the original data sample $x_0$​. The total loss decomposes across all diffusion time steps:  
+    $$
+    L = L_0 + L_1 + \dots + L_T
+    $$
+    where, except for $L_0$​, each $L_t$​ corresponds to the **KL divergence between two Gaussians**—and simplifies to a squared‑error (L2) term concerning their means.
+    
+2. **Sampling $x_t$​ Directly ("Nice Property")**  
+    Because sums of Gaussians remain Gaussian, it's possible to sample the noisy version $x_t$​ at any time-step $t$ in closed form as:  
+    $$
+    q(x_t \mid x_0) = \mathcal{N}(x_t; \bar{\alpha}_t x_0,\ (1 - \bar{\alpha}_t)\,I)
+    $$
+    where $\bar{\alpha}_t = \prod_{s=1}^{t}(1 - \beta_s)$. This allows direct sampling of $x_t$​ from $x_0$​, enabling random $t$-step loss evaluation during training.
+    
+3. **Reparametrizing the Mean: Learning to Predict Noise**  
+    Instead of having the network predict the mean $\mu_\theta(x_t, t)$ of the reverse distribution directly, it’s rewritten so the network $\epsilon_\theta(x_t, t)$ predicts the added noise. The mean can then be reconstructed as a function of this prediction. 
+    $$
 \mu_\theta(x_t, t) = \frac{1}{\sqrt{\alpha_t}}
 \left(x_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}} \, \epsilon_\theta(x_t, t)\right)
 $$
-
-$$
+    The training objective simplifies to minimizing the MSE:  
+    $$
 \lVert \epsilon - \epsilon_\theta(x_t, t) \rVert^2
 = \lVert \epsilon - \epsilon_\theta\big(\sqrt{\bar{\alpha}_t}x_0 + \sqrt{1-\bar{\alpha}_t}\,\epsilon,\, t\big) \rVert^2
 $$
+    where $x_t$​ is obtained via the "nice property" above and $\epsilon$ is the true noise added.
+    
+4. **Resulting Training Process**  
+	![[Pasted image 20250829010726.png]]In other words:
+
+	- we take a random sample $x_0$​ from the real unknown and possibily complex data distribution $q(x_0)$
+	- we sample a noise level $t$ uniformly between $1$ and $T$ (i.e., a random time step)
+	- we sample some noise from a Gaussian distribution and corrupt the input by this noise at level $t$ (using the nice property defined above)
+	- the neural network is trained to predict this noise based on the corrupted image $x_t$​ (i.e. noise applied on $x_0$​ based on known schedule $β_t$​)
+
+---
+
+### Why This Matters
+
+- **Simplifies optimization**: Using the ELBO lets the model optimize each timestep separately via a straightforward L2 loss.
+    
+- **Efficiency**: The "nice property" avoids explicitly chaining the forward diffusion to reach $x_t$​.
+    
+- **Robust learning target**: Predicting noise instead of the mean tends to be more stable and effective during training.
 
 
-![[Pasted image 20250829010726.png]]
+---
 
 - Most diffusion models use architectures that are some variant of a [U-net](https://www.google.com/url?q=https%3A%2F%2Farxiv.org%2Fabs%2F1505.04597) and that's what we'll use here.
 	- a [[ResNet downsampling]] block with [[spatial self-attention]]
