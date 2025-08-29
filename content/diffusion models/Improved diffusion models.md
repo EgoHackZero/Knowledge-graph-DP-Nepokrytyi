@@ -45,3 +45,17 @@ $$
 $$
 with small offset $s \approx 0.008$.
 - This concentrates noise addition in later steps, improving training stability and sample quality.
+
+---
+
+### **D. Classifier-Free Guidance (for conditional tasks)**
+
+- They show that guidance can be done without an external classifier, by training the model with randomly dropped conditioning information and interpolating predictions at inference.
+## 3. Summary Table
+
+|Change|Original DDPM|Improved DDPM|
+|---|---|---|
+|Reverse variance|Fixed from forward process|Learned (interpolated between forward & posterior variance)|
+|Loss|Only noise-prediction MSE|Hybrid loss: noise MSE + KL variance term|
+|Noise schedule|Linear βt\beta_tβt​|Cosine βt\beta_tβt​ schedule|
+|Guidance|Requires classifier|Classifier-free guidance|
