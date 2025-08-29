@@ -73,14 +73,14 @@ This was then later improved in the [[Improved diffusion models]] paper, where
 3. **Reparametrizing the Mean: Learning to Predict Noise**  
     Instead of having the network predict the mean $\mu_\theta(x_t, t)$ of the reverse distribution directly, it’s rewritten so the network $\epsilon_\theta(x_t, t)$ predicts the added noise. The mean can then be reconstructed as a function of this prediction. 
     $$
-\mu_\theta(x_t, t) = \frac{1}{\sqrt{\alpha_t}}
-\left(x_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}} \, \epsilon_\theta(x_t, t)\right)
-$$
+	\mu_\theta(x_t, t) = \frac{1}{\sqrt{\alpha_t}}
+	\left(x_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t}} \, \epsilon_\theta(x_t, t)\right)
+	$$
     The training objective simplifies to minimizing the MSE:  
     $$
-\lVert \epsilon - \epsilon_\theta(x_t, t) \rVert^2
-= \lVert \epsilon - \epsilon_\theta\big(\sqrt{\bar{\alpha}_t}x_0 + \sqrt{1-\bar{\alpha}_t}\,\epsilon,\, t\big) \rVert^2
-$$
+	\lVert \epsilon - \epsilon_\theta(x_t, t) \rVert^2
+	= \lVert \epsilon - \epsilon_\theta\big(\sqrt{\bar{\alpha}_t}x_0 + \sqrt{1-\bar{\alpha}_t}\,\epsilon,\, t\big) \rVert^2
+	$$
     where $x_t$​ is obtained via the "nice property" above and $\epsilon$ is the true noise added.
     
 4. **Resulting Training Process**  
