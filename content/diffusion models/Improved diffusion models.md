@@ -26,3 +26,22 @@ where $v$ is predicted by the network and interpolates between the forward varia
     2. **Variational bound term** from the ELBO for variance learning.
         
 - Final loss:
+$$
+L = L_{\text{simple}} + \lambda L_{\text{vb}}
+$$
+$$
+L_{\text{vb}} = \mathrm{KL}\big(q(x_{t-1} \mid x_t, x_0) \ \|\ p_\theta(x_{t-1} \mid x_t) \big)
+$$
+where $L_{\text{vb}}$​ is the [[KL term]] between the learned reverse distribution and the true posterior $q(x_{t-1} \mid x_t, x_0)$.
+
+---
+
+### **C. Cosine Noise Schedule**
+
+- Instead of the linear $\beta_t$​ schedule in DDPM, they use:
+
+$$
+\bar{\alpha}_t = \frac{f(t)}{f(0)}, \quad f(t) = \cos^2\left( \frac{t/T + s}{1+s} \cdot \frac{\pi}{2} \right)
+$$
+with small offset $s \approx 0.008$.
+- This concentrates noise addition in later steps, improving training stability and sample quality.
