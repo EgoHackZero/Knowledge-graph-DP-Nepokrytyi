@@ -84,15 +84,12 @@ This was then later improved in the [[Improved diffusion models]] paper, where
     where $x_t$​ is obtained via the "nice property" above and $\epsilon$ is the true noise added.
     
 4. **Resulting Training Process**  
-	![[Pasted image 20250829010726.png]]In other words:
+	![[training_DDPM.png]]In other words:
 
 	- we take a random sample $x_0$​ from the real unknown and possibily complex data distribution $q(x_0)$
 	- we sample a noise level $t$ uniformly between $1$ and $T$ (i.e., a random time step)
 	- we sample some noise from a Gaussian distribution and corrupt the input by this noise at level $t$ (using the nice property defined above)
 	- the neural network is trained to predict this noise based on the corrupted image $x_t$​ (i.e. noise applied on $x_0$​ based on known schedule $β_t$​)
-
----
-
 ### Why This Matters
 
 - **Simplifies optimization**: Using the ELBO lets the model optimize each timestep separately via a straightforward L2 loss.
@@ -100,10 +97,22 @@ This was then later improved in the [[Improved diffusion models]] paper, where
 - **Efficiency**: The "nice property" avoids explicitly chaining the forward diffusion to reach $x_t$​.
     
 - **Robust learning target**: Predicting noise instead of the mean tends to be more stable and effective during training.
+# The neural network
+The neural network needs to take in a noised image at a specific time step and return the predicted noise. It is also important to note that the predicted noise is a tensor that has the same size/resolution as the input image. Thus, from a technical point of view, the network take in and outputs tensors of the same shape.
 
+What is typically used here is very similar to that of an [[Autoencoder]].
 
----
+Most diffusion models use architectures that are some variant of a [U-net](https://www.google.com/url?q=https%3A%2F%2Farxiv.org%2Fabs%2F1505.04597) and that's what we'll use here.
+![[Pasted image 20250921201418.png]]
+## Position embeddings
 
-- Most diffusion models use architectures that are some variant of a [U-net](https://www.google.com/url?q=https%3A%2F%2Farxiv.org%2Fabs%2F1505.04597) and that's what we'll use here.
-	- a [[ResNet downsampling]] block with [[spatial self-attention]]
+As the parameters of the neural network are shared across time (noise level), the authors employ sinusoidal position embeddings to encode $t$, inspired by the Transformer ([Vaswani et al., 2017](https://arxiv.org/abs/1706.03762)). This makes the neural network "know" at which particular time step (noise level) it is operating, for every image in a batch.
 
+## ResNet block
+
+ResNet block is the core building block of the U-Net model. The DDPM authors employed a Wide ResNet block ([Zagoruyko et al., 2016](https://arxiv.org/abs/1605.07146)), but Phil Wang has replaced the standard convolutional layer by a "weight standardized" version, which works better in combination with group normalization ([Kolesnikov et al., 2019](https://arxiv.org/abs/1912.11370)).
+- a [[ResNet downsampling]] block with [[spatial self-attention]]
+
+## Attention module
+
+DDPM authors added attention module in between the convolutional blocks. Attention is the building block of the famous Transformer architecture ([Vaswani et al., 2017](https://arxiv.org/abs/1706.03762)), which has shown great success in various domains of AI, from NLP etc. Phil Wang employs 2 variants of attention: one is regular multi-head self-attention (as used in the Transformer), the other one is a [linear attention variant](https://github.com/lucidrains/linear-attention-transformer) ([Shen et al., 2018](https://arxiv.org/abs/1812.01243)), whose time- and memory requirements scale linear in the sequence length, as opposed to quadratic for regular attention.
